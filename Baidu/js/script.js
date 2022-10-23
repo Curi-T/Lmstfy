@@ -84,6 +84,7 @@ $(function() {
     }
     
     /* 自己人，停下 */ 
+    /*
     $stop.click(function() {
         clearTimeout(stepTimeout);
         clearInterval(typeInterval);
@@ -93,6 +94,7 @@ $(function() {
         query = false;
         $tips.html('输入一个问题，然后点击百度一下');
     });
+    */
     
     /* 提交 */
     $('#search-form').submit(function() {
