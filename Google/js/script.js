@@ -38,7 +38,7 @@ $(function () {
     var query = $.getUrlParam('q');
     if (!!query) {
         try {
-            query = decodeURIComponent(query);
+            query = Base64.decode(query);
         } catch (e) {
             console.log(e);
         }
@@ -61,11 +61,15 @@ $(function () {
 
                 stepTimeout = setTimeout(function () {
                     $arrow.fadeOut();
+                    //  获取输入框的内容
+                    var separator = /url(@|#|&|=)/i;
+                    var q = query.split(separator,3);
+                    var content = q[0];
 
                     var i = 0;
                     typeInterval = setInterval(function () {
-                        $kw.val(query.substr(0, i));
-                        if (++i > query.length) {
+                        $kw.val(content.substr(0, i));
+                        if (++i > content.length) {
                             clearInterval(typeInterval);
                             $tips.html('3、点击下“Google”按钮');
 
@@ -77,7 +81,20 @@ $(function () {
                                 $arrow.addClass('active');
 
                                 stepTimeout = setTimeout(function () {
-                                    window.location = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+                                    var u = $.getUrlParam('u');
+
+                                    //  判断参数是否有url
+                                    var patt = new RegExp(separator)
+                                    if (patt.test(query)) {
+                                        var url = q[2];
+                                        //  判断url是否有https，无则加上
+                                        if (url.indexOf('https://') == -1 && url.indexOf("http://") == -1)
+                                            url = 'https://' + url;
+                                        window.location = url;
+                                    } else {
+                                        //  否则直接进行百度搜索 content
+                                        window.location = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+                                    }
                                 }, 1000);
                             });
                         }
@@ -111,7 +128,7 @@ $(function () {
         } else {
             $tips.html('↓↓↓ 复制下面的链接，教伸手党使用Google');
             $('#output').fadeIn();
-            $urlOutput.val(window.location.origin + window.location.pathname + '?q=' + encodeURIComponent(question)).focus().select();
+            $urlOutput.val(window.location.origin + window.location.pathname + '?q=' + Base64.encode(question)).focus().select();
         }
         return false;
     });
