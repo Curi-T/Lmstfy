@@ -124,6 +124,7 @@ $(function() {
         } else {
             $tips.html('↓↓↓ 复制下面的链接，教伸手党使用百度');
             $('#output').fadeIn();
+            $('#shortUrlDiv').css('display','none');
             $urlOutput.val(window.location.origin + window.location.pathname + '?q=' + Base64.encode(question)).focus().select();
         }
         return false;
@@ -137,6 +138,43 @@ $(function() {
     clipboard.on('error', function(e) {
         $tips.html('<span style="color: red">复制失败，请手动复制...</span>');
     });
+
+    /*  短链接生成   */
+    function shortUrl() {
+        var flag = true;
+        var text = $tips.html();
+        $('#shortUrlDiv').fadeIn();
+        $('#yamShare').click(function () {
+            window.open('https://s.yam.com/');
+        });
+        $('#xiaomark').click(function () {
+            window.open('https://xiaomark.com/');
+        });
+        $tips.html('网络较慢，耐心等待，建议使用下方其他短链接');
+        $.ajax({
+            url: 'https://api.uomg.com/api/long2dwz',
+            type: "POST",
+            data: {
+                url:  $urlOutput.val(),
+            },
+            crossDomain: true,
+            success: function(data){
+                $urlOutput.val(data.ae_url);
+                $tips.html(text);
+                flag = true;
+            },
+            error: function () {
+                $tips.html("短链接生成失败，请复制下方链接到新出现的友链中生成")
+                flag = false;
+            },
+            dataType: "json"
+        });
+        return flag;
+    };
+
+    $('#shortUrl').click(function () {
+        shortUrl();
+    })
     
     /* 预览 */ 
     $('#preview').click(function() {
