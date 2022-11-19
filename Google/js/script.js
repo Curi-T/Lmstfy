@@ -170,7 +170,10 @@ $(function () {
 
     /*  二维码  */
     $('#QRCodeBut').click(function () {
-        $('#QRCodeImg').attr('src','http://a.bbest.me/short/QRCode?q=' + $urlOutput.val());
+        $tips.html("如若二维码未加载，点击下方图片即可进入二维码页面")
+        var url = 'http://a.bbest.me/short/QRCode?q=' + $urlOutput.val()
+        $('#QRCodeA').attr('href', url)
+        $('#QRCodeImg').attr('src', url);
         $('#QRCodeImg').fadeIn()
     });
 
