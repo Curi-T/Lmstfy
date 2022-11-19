@@ -11,8 +11,9 @@
 [🔍 让我帮你 Google 一下？Let Me Google That For You](https://curi-t.github.io/Lmstfy/Google)   
 [🔍 有求必应？Ask and it is given](https://curi-t.github.io/Lmstfy/Bing)
 
-新增 **支持跳转指定的网址**   
-新增 **生成短链接**
+新增  **支持跳转指定的网址**   
+新增  **生成短链接**  
+新增  **生成二维码**
 
 如：输入 **如何百度url=curi-t.github.io**，  
 将会跳转至 curi-t.github.io  

@@ -116,7 +116,8 @@ $(function() {
     /* 提交 */
     $('#search-form').submit(function() {
         if(!!query) return false;
-        
+
+        $('#QRCodeImg').fadeOut();
         var question = $.trim($kw.val());
         if(!question) {
             $tips.html('<span style="color: red">搜了个寂寞？</span>');
@@ -140,41 +141,33 @@ $(function() {
     });
 
     /*  短链接生成   */
-    function shortUrl() {
-        var flag = true;
+    $('#shortUrl').click(function () {
         var text = $tips.html();
         $('#shortUrlDiv').fadeIn();
-        $('#yamShare').click(function () {
-            window.open('https://s.yam.com/');
-        });
-        $('#xiaomark').click(function () {
-            window.open('https://xiaomark.com/');
-        });
         $tips.html('网络较慢，耐心等待，建议使用下方其他短链接');
         $.ajax({
-            url: 'https://api.uomg.com/api/long2dwz',
+            url: 'http://a.bbest.me/short/create',
             type: "POST",
             data: {
-                url:  $urlOutput.val(),
+                l:  $urlOutput.val(),
             },
             crossDomain: true,
             success: function(data){
-                $urlOutput.val(data.ae_url);
+                $urlOutput.val('http://www.bbest.me/' + data.short_url);
                 $tips.html(text);
-                flag = true;
             },
             error: function () {
                 $tips.html("短链接生成失败，请复制下方链接到新出现的友链中生成")
-                flag = false;
             },
             dataType: "json"
         });
-        return flag;
-    };
+    });
 
-    $('#shortUrl').click(function () {
-        shortUrl();
-    })
+    /*  二维码  */
+    $('#QRCodeBut').click(function () {
+        $('#QRCodeImg').attr('src','http://a.bbest.me/short/QRCode?q=' + $urlOutput.val());
+        $('#QRCodeImg').fadeIn()
+    });
     
     /* 预览 */ 
     $('#preview').click(function() {
